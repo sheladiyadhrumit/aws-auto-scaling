@@ -1,0 +1,142 @@
+{
+  "Version": "2012-10-17",
+
+  "Statement": [
+
+    {
+      "Sid": "AllowCloudWatchMetrics",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "cloudwatch:PutMetricData",
+        "cloudwatch:GetMetricData",
+        "cloudwatch:GetMetricStatistics",
+        "cloudwatch:ListMetrics",
+        "cloudwatch:DescribeAlarms"
+      ],
+
+      "Resource": "*",
+
+      "Condition": {
+        "StringEquals": {
+          "cloudwatch:namespace": [
+            "AWS/EC2",
+            "CWAgent",
+            "CloudOps/AutoScaling"
+          ]
+        }
+      }
+    },
+
+    {
+      "Sid": "AllowCloudWatchLogs",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "logs:CreateLogGroup",
+        "logs:CreateLogStream",
+        "logs:PutLogEvents",
+        "logs:DescribeLogStreams",
+        "logs:DescribeLogGroups"
+      ],
+
+      "Resource": [
+        "arn:aws:logs:*:*:log-group:/cloudops/*",
+        "arn:aws:logs:*:*:log-group:/cloudops/*:log-stream:*"
+      ]
+    },
+
+    {
+      "Sid": "AllowSNSPublish",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "sns:Publish"
+      ],
+
+      "Resource": "*",
+
+      "Condition": {
+        "StringLike": {
+          "sns:RequestTopicName": "cloudops-*"
+        }
+      }
+    },
+
+    {
+      "Sid": "AllowEC2ReadOwnMetadata",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "ec2:DescribeInstances",
+        "ec2:DescribeTags",
+        "ec2:DescribeVolumes",
+        "ec2:DescribeRegions",
+        "ec2:DescribeAvailabilityZones"
+      ],
+
+      "Resource": "*"
+    },
+
+    {
+      "Sid": "AllowAutoScalingReadOnly",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "autoscaling:DescribeAutoScalingGroups",
+        "autoscaling:DescribeAutoScalingInstances",
+        "autoscaling:DescribeScalingActivities",
+        "autoscaling:DescribePolicies"
+      ],
+
+      "Resource": "*"
+    },
+
+    {
+      "Sid": "AllowSSMForRemoteAccess",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "ssm:GetParameter",
+        "ssm:GetParameters",
+        "ssm:GetParametersByPath",
+        "ssm:UpdateInstanceInformation",
+        "ssmmessages:CreateControlChannel",
+        "ssmmessages:CreateDataChannel",
+        "ssmmessages:OpenControlChannel",
+        "ssmmessages:OpenDataChannel",
+        "ec2messages:AcknowledgeMessage",
+        "ec2messages:DeleteMessage",
+        "ec2messages:FailMessage",
+        "ec2messages:GetEndpoint",
+        "ec2messages:GetMessages",
+        "ec2messages:SendReply"
+      ],
+
+      "Resource": "*"
+    },
+
+    {
+      "Sid": "AllowS3ForArtifacts",
+
+      "Effect": "Allow",
+
+      "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+      ],
+
+      "Resource": [
+        "arn:aws:s3:::cloudops-*",
+        "arn:aws:s3:::cloudops-*/*"
+      ]
+    }
+
+  ]
+}
